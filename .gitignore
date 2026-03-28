@@ -8,7 +8,6 @@ __pycache__/
 env/
 venv/
 .venv/
-.ENV
 .venv.bak/
 pip-log.txt
 pip-delete-this-directory.txt
@@ -24,46 +23,30 @@ coverage.xml
 *.po
 *~
 .pytest_cache/
-.mypy_cache/
 .hypothesis/
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
 .eggs/
+eggs/
+parts/
+var/
+.sass-cache/
+.wafpickle-N/
+install-sh
+config.log
+config.status
 lib/
 lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+pypy-c-jit-*
+TAGS
+ID
+GPATH
+GTAGS
+GRTAGS
+compile_commands.json
 
-# Testing
-.pytest_cache/
-.hypothesis/
-
-# IDEs
+# VSCode
 .vscode/
-.idea/
 
-# Environment variables
-.env
-.env.local
-.env.*
-
-# OS generated files
+# System files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 ```
