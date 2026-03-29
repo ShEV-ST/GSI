@@ -35,9 +35,8 @@ class Agent:
         # Навык print: выводит приветственное сообщение
         self.register_skill('print', ('__builtins__', 'print', '"Привет от агента!"'))
         
-        # Навык input не регистрируется по умолчанию, чтобы избежать проблем с stdin в тестах
-        # Его можно добавить вручную при необходимости:
-        # self.register_skill('input', ('__builtins__', 'input', '"Введите команду: "'))
+        # Навык input: запрашивает команду у пользователя (необходим для команды "СТОП")
+        self.register_skill('input', ('__builtins__', 'input', '"Введите команду (или СТОП для выхода): "'))
 
     def pulse_generator(self):
         """Генератор пульса агента.
@@ -152,12 +151,16 @@ class Agent:
         
         while self.state == 'running':
             for skill_id in skill_keys:
-                # Проверка команды остановки (можно реализовать через input в навыке)
-                # Здесь для демонстрации просто выполняем навыки
-                
                 try:
                     # Выполнение навыка
                     result = self.execute_skill(skill_id)
+                    
+                    # Проверка результата навыка input на команду "СТОП"
+                    if skill_id == 'input' and isinstance(result, str):
+                        if result.strip().upper() == 'СТОП':
+                            print("\nПолучена команда остановки.")
+                            self.state = 'stopped'
+                            break
                     
                     # Удар пульса
                     self.beat()
@@ -169,8 +172,9 @@ class Agent:
                     print(f"Ошибка в цикле: {e}")
                     yield None
             
-            # Если навыки закончились, останавливаемся
-            self.state = 'stopped'
+            # Если навыки закончились или получен СТОП, останавливаемся
+            if self.state != 'running':
+                break
         
         print("\nАгент завершил работу.")
 
