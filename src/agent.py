@@ -18,9 +18,12 @@ class Agent:
         self.skills = {}
         
         # Регистрация базовых навыков
+        # Навык print: выводит приветственное сообщение
         self.register_skill('__builtins__', 'print', '"Привет от агента!"')
-        # Навык input закомментирован для автоматического запуска, так как требует ввода пользователя
-        # self.register_skill('__builtins__', 'input', '"Введите данные: "')
+        
+        # Навык input: запрашивает данные у пользователя
+        # Теперь раскомментирован для демонстрации интерактивности
+        self.register_skill('__builtins__', 'input', '"Введите команду или данные: "')
 
     def pulse_generator(self):
         """Генератор пульса агента.
@@ -70,9 +73,26 @@ class Agent:
             return None
         
         tr_inp = self.skills[skill_id]
+        module_name, func_name, args_str = tr_inp
+        
         try:
-            # Выполнение триплета: module.function(args)
-            result = eval(f"{tr_inp[0]}.{tr_inp[1]}({tr_inp[2]})")
+            # Получаем функцию из встроенной области видимости или импортируем модуль
+            if module_name == '__builtins__':
+                # Для встроенных функций используем globals() или __builtins__ как dict
+                if isinstance(__builtins__, dict):
+                    func = __builtins__[func_name]
+                else:
+                    func = getattr(__builtins__, func_name)
+            else:
+                # Импорт модуля по имени
+                import importlib
+                module = importlib.import_module(module_name)
+                func = getattr(module, func_name)
+            
+            # Выполняем функцию с аргументами
+            # eval используется только для безопасного разбора строки аргументов
+            result = func(eval(args_str)) if args_str else func()
+            
             if self.debug:
                 print(f"Выполнен навык {skill_id}, результат: {result}")
             return result
