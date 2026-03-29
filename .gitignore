@@ -11,11 +11,25 @@ __pycache__/
 coverage/
 htmlcov/
 
-# Logs
-*.log
-
 # Environment
+.venv/
+venv/
 .env
 .env.local
 *.env.*
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
 ```
