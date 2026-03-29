@@ -6,6 +6,8 @@ import os
 load_dotenv()
 
 
+import random
+
 class Agent:
     """Базовый класс ИИ агента."""
 
@@ -135,48 +137,67 @@ class Agent:
         
         Извлекает очередной навык из стратегии, выполняет его,
         делает один beat() и возвращает результат.
+        Если стратегия пуста, добавляет случайный навык.
         
         Yield:
             Результат выполнения навыка или None
         
         Raises:
-            StopIteration: При команде "СТОП" или отсутствии навыков
+            StopIteration: При команде "СТОП"
         """
-        print(f"Запуск {self.name}...")
+        print(f"[{self.name}] Запуск... (Режим бесконечного исследования)")
         if self.debug:
             print("Режим отладки включён")
         
-        # Стратегия - простой список навыков по очереди
-        skill_keys = list(self.skills.keys())
+        # Стратегия - список навыков для выполнения
+        strategy = list(self.skills.keys())
         
         while self.state == 'running':
-            for skill_id in skill_keys:
-                try:
-                    # Выполнение навыка
-                    result = self.execute_skill(skill_id)
-                    
-                    # Проверка результата навыка input на команду "СТОП"
-                    if skill_id == 'input' and isinstance(result, str):
-                        if result.strip().upper() == 'СТОП':
-                            print("\nПолучена команда остановки.")
-                            self.state = 'stopped'
-                            break
-                    
-                    # Удар пульса
-                    self.beat()
-                    
-                    # Возврат результата генератором
-                    yield result
-                    
-                except Exception as e:
-                    print(f"Ошибка в цикле: {e}")
-                    yield None
-            
-            # Если навыки закончились или получен СТОП, останавливаемся
-            if self.state != 'running':
-                break
+            try:
+                # Если стратегия пуста, добавляем случайный навык
+                if not strategy:
+                    if self.skills:
+                        random_skill_name = random.choice(list(self.skills.keys()))
+                        # Для input используем подсказку, для print - сообщение
+                        if random_skill_name == 'input':
+                            # Обновляем аргумент в триплете для следующего вызова
+                            old_triplet = self.skills[random_skill_name]
+                            new_triplet = (old_triplet[0], old_triplet[1], "'Введите команду (или СТОП): '")
+                            self.skills[random_skill_name] = new_triplet
+                        
+                        strategy.append(random_skill_name)
+                        print(f"[{self.name}] Стратегия пуста. Добавлен случайный навык: {random_skill_name}")
+                    else:
+                        print(f"[{self.name}] Нет доступных навыков. Остановка.")
+                        self.state = 'stopped'
+                        continue
+
+                skill_id = strategy.pop(0)
+                
+                # Выполнение навыка
+                result = self.execute_skill(skill_id)
+                
+                # Проверка результата навыка input на команду "СТОП"
+                if skill_id == 'input' and isinstance(result, str):
+                    if result.strip().upper() == 'СТОП':
+                        print(f"\n[{self.name}] Получена команда остановки. Завершение работы.")
+                        self.state = 'stopped'
+                        yield f"Остановлено пользователем: {result}"
+                        break
+                
+                # Удар пульса
+                self.beat()
+                
+                # Возврат результата генератором
+                yield result
+                
+            except Exception as e:
+                error_msg = f"Ошибка в цикле: {e}"
+                print(f"[{self.name}] {error_msg}")
+                self.beat()
+                yield f"Error: {error_msg}"
         
-        print("\nАгент завершил работу.")
+        print(f"\n[{self.name}] Агент завершил работу.")
 
 
 if __name__ == "__main__":
