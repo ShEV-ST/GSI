@@ -1,53 +1,35 @@
-# Compiled and build artifacts
-*.pyc
+```
+# Python
 __pycache__/
-*.o
-*.obj
-*.out
+*.pyc
+*.pyo
+*.pyd
 
-# Dependencies
-.venv/
-venv/
-pip-wheel-metadata/
-
-# Logs and temp files
-*.log
-*.tmp
-*.swp
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Coverage
+# Testing
+.pytest_cache/
 .coverage
 coverage/
 htmlcov/
 
-# Python specific
-*.pyo
-*.pyd
-.Python
-*.so
-*.egg-info/
-.tox/
-.pytest_cache/
-.mypy_cache/
+# Environment
+.venv/
+venv/
+.env
+.env.local
+*.env.*
 
-# Build directories
+# Logs and temporary files
+*.log
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build and distribution
 build/
 dist/
-*.egg
-
-# Original rules preserved
-*.log
+*.egg-info/
+```
