@@ -22,25 +22,29 @@ def get_cpu_info() -> None:
     """Отображение информации о процессоре."""
     print_separator("ИНФОРМАЦИЯ О ПРОЦЕССОРЕ (CPU)")
     
-    # Количество логических и физических ядер
-    print(f"Логические ядра: {psutil.cpu_count(logical=True)}")
-    print(f"Физические ядра: {psutil.cpu_count(logical=False)}")
+    try:
+        # Количество логических и физических ядер
+        print(f"Логические ядра: {psutil.cpu_count(logical=True)}")
+        print(f"Физические ядра: {psutil.cpu_count(logical=False)}")
+        
+        # Частота процессора
+        freq = psutil.cpu_freq()
+        if freq:
+            print(f"Текущая частота: {freq.current:.2f} МГц")
+            print(f"Максимальная частота: {freq.max:.2f} МГц")
+            print(f"Минимальная частота: {freq.min:.2f} МГц")
+        else:
+            print("Информация о частоте процессора недоступна")
+        
+        # Загрузка процессора
+        print(f"\nЗагрузка процессора (1 сек): {psutil.cpu_percent(interval=1)}%")
     
-    # Частота процессора
-    freq = psutil.cpu_freq()
-    if freq:
-        print(f"Текущая частота: {freq.current:.2f} МГц")
-        print(f"Максимальная частота: {freq.max:.2f} МГц")
-        print(f"Минимальная частота: {freq.min:.2f} МГц")
-    
-    # Загрузка процессора
-    print(f"\nЗагрузка процессора (1 сек): {psutil.cpu_percent(interval=1)}%")
-    
-    # Загрузка по ядрам
-    print("\nЗагрузка по ядрам:")
-    for i, percentage in enumerate(psutil.cpu_percent(interval=1, percpu=True)):
-        print(f"  Ядро {i}: {percentage}%")
-
+        # Загрузка по ядрам
+        print("\nЗагрузка по ядрам:")
+        for i, percentage in enumerate(psutil.cpu_percent(interval=1, percpu=True)):
+            print(f"  Ядро {i}: {percentage}%")
+    except Exception as e:
+        print(f"Предупреждение: Не удалось получить полную информацию о процессоре: {e}")
 
 def get_memory_info() -> None:
     """Отображение информации об оперативной памяти."""
