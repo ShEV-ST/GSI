@@ -42,9 +42,9 @@ def main():
         print(f"✅ Сессия создана. ID: {session.id}")
 
         # Получаем первое окно и панель по умолчанию
-        window = session.attached_window
+        window = session.active_window
         window.rename_window("main_dashboard")
-        pane_main = window.attached_pane
+        pane_main = window.active_pane
 
         # Настройка главной панели
         pane_main.send_keys("echo '=== Панель управления агентом ==='")
