@@ -61,8 +61,10 @@ def main():
         pane_bottom.send_keys("echo '>>> Панель логов запущена'")
         
         # Теперь разделим верхнюю часть (где находится pane_main) вертикально (справа появится новая)
-        # Вызываем split у самой панели pane_main с параметром vertical=False (делить слева-направо)
-        pane_right = pane_main.split(attach=False, vertical=False)
+        # В новой версии libtmux используем start_directory или другие параметры
+        # Для вертикального разделения вызываем split у панели без параметра vertical
+        # По умолчанию pane.split() делит горизонтально (новая панель справа)
+        pane_right = pane_main.split(attach=False)
         
         pane_right.send_keys("echo '>>> Панель мониторинга ресурсов'")
         pane_right.send_keys("python3 -c \"import psutil; print(f'CPU: {psutil.cpu_percent()}%')\"")
