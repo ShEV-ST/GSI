@@ -55,15 +55,13 @@ def main():
         print("\n🔪 Разбиваем окно на панели...")
         
         # Разбиваем горизонтально (снизу появляется новая панель)
-        pane_bottom = window.split(attach=False)
+        # split_direction='top-bottom' означает разделение сверху-вниз (новая панель снизу)
+        pane_bottom = window.split(attach=False, split_direction='top-bottom')
         pane_bottom.send_keys("echo '>>> Панель логов запущена'")
         
         # Разбиваем верхнюю панель вертикально (справа появляется новая)
-        pane_right = pane_main.split(attach=False, vertical=False) # vertical=False значит сплит по вертикали (колонки)
-        # Примечание: в tmux split-window -v делает горизонтальное разделение (панели друг под другом), 
-        # а -h делает вертикальное (панели рядом). 
-        # В libtmux split_window(vertical=True) -> -v (горизонтальный сплит, панели сверху/снизу)
-        # В libtmux split_window(vertical=False) -> -h (вертикальный сплит, панели слева/справа)
+        # split_direction='left-right' означает разделение слева-направо (новая панель справа)
+        pane_right = pane_main.split(attach=False, split_direction='left-right')
         
         pane_right.send_keys("echo '>>> Панель мониторинга ресурсов'")
         pane_right.send_keys("python3 -c \"import psutil; print(f'CPU: {psutil.cpu_percent()}%')\"")
