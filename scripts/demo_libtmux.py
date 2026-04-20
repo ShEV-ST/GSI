@@ -25,7 +25,7 @@ def main():
     session_name = "demo_agent_session"
 
     # 1. Проверка и очистка: если сессия уже есть, убиваем её для чистоты эксперимента
-    existing_session = server.get_by_id(f"${session_name}")
+    existing_session = server.sessions.get(session_id=f"${session_name}", default=None)
     if existing_session:
         print(f"⚠️  Сессия '{session_name}' уже существует. Убиваем её...")
         existing_session.kill_session()
