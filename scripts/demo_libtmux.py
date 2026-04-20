@@ -54,14 +54,15 @@ def main():
         # 3. Разбиение окна на панели
         print("\n🔪 Разбиваем окно на панели...")
         
-        # Разбиваем горизонтально (снизу появляется новая панель)
-        # direction='top-bottom' означает разделение сверху-вниз (новая панель снизу)
-        pane_bottom = window.split(attach=False, direction='top-bottom')
+        # Разбиваем главное окно горизонтально (снизу появляется новая панель)
+        # Для окна split() без аргументов обычно делит вертикально (новая панель снизу)
+        # Используем attach=False чтобы не переключаться на новую панель сразу
+        pane_bottom = window.split(attach=False)
         pane_bottom.send_keys("echo '>>> Панель логов запущена'")
         
-        # Разбиваем верхнюю панель вертикально (справа появляется новая)
-        # direction='left-right' означает разделение слева-направо (новая панель справа)
-        pane_right = window.split(attach=False, direction='left-right')
+        # Теперь разделим верхнюю часть (где находится pane_main) вертикально (справа появится новая)
+        # Вызываем split у самой панели pane_main с параметром vertical=False (делить слева-направо)
+        pane_right = pane_main.split(attach=False, vertical=False)
         
         pane_right.send_keys("echo '>>> Панель мониторинга ресурсов'")
         pane_right.send_keys("python3 -c \"import psutil; print(f'CPU: {psutil.cpu_percent()}%')\"")
