@@ -55,11 +55,11 @@ def main():
         print("\n🔪 Разбиваем окно на панели...")
         
         # Разбиваем горизонтально (снизу появляется новая панель)
-        pane_bottom = window.split_window(attach=False)
+        pane_bottom = window.split(attach=False)
         pane_bottom.send_keys("echo '>>> Панель логов запущена'")
         
         # Разбиваем верхнюю панель вертикально (справа появляется новая)
-        pane_right = pane_main.split_window(attach=False, vertical=False) # vertical=False значит сплит по вертикали (колонки)
+        pane_right = pane_main.split(attach=False, vertical=False) # vertical=False значит сплит по вертикали (колонки)
         # Примечание: в tmux split-window -v делает горизонтальное разделение (панели друг под другом), 
         # а -h делает вертикальное (панели рядом). 
         # В libtmux split_window(vertical=True) -> -v (горизонтальный сплит, панели сверху/снизу)
